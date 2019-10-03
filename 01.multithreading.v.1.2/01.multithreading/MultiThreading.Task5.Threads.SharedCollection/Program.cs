@@ -10,9 +10,10 @@ using System.Threading;
 
 namespace MultiThreading.Task5.Threads.SharedCollection
 {
-    class Program
+    public sealed class Program
     {
-        static object locker = new object();
+        private static readonly List<int> SharedCollection = new List<int>();
+        private static readonly object Locker = new object();
 
         static void Main(string[] args)
         {
@@ -22,48 +23,45 @@ namespace MultiThreading.Task5.Threads.SharedCollection
             Console.WriteLine("Use Thread, ThreadPool or Task classes for thread creation and any kind of synchronization constructions.");
             Console.WriteLine();
 
-            var sharedCollection = new List<int>();
+            var thread1 = new Thread(AddElementsToCollection);
+            var thread2 = new Thread(PrintAllElements);
 
-            var thread1 = new Thread(new ParameterizedThreadStart(AddElementsToCollection));
-
-            thread1.Start(sharedCollection);
+            thread1.Start();
+            thread2.Start();
 
             Console.ReadLine();
         }
 
-        static void AddElementsToCollection(object objectList)
+        private static void AddElementsToCollection()
         {
-            lock (locker)
+            lock (Locker)
             {
                 var random = new Random();
 
-                var list = (ICollection<int>)objectList;
-
                 for (int i = 0; i < 5; i++)
                 {
-                    list.Add(random.Next(0, 100));
-                    PrintAllElements(list);
+                    SharedCollection.Add(random.Next(0, 100));
+                    PrintAllElements();
                 }
+            }
+            
+        }
+
+        private static void PrintAllElements()
+        {
+            lock (Locker)
+            {
+                Console.WriteLine("All elements: ");
+                foreach (var number in SharedCollection)
+                {
+                    Console.WriteLine(number);
+                }
+
+                Console.WriteLine($"Items in collection: {SharedCollection.Count}");
+                Console.WriteLine();
             }
         }
 
-        static void PrintAllElements(object objectList)
-        {
-            var t = new Thread(() =>
-            {
-                lock (locker)
-                {
-                    var list = (ICollection<int>)objectList;
-
-                    Console.WriteLine("All elements: ");
-                    foreach (var number in list)
-                    {
-                        Console.WriteLine(number);
-                    }
-                }
-            });
-
-            t.Start();
-        }
+            
     }
 }
