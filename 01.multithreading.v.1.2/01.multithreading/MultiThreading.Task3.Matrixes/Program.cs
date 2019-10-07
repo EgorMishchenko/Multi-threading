@@ -7,6 +7,8 @@
  */
 
 using System;
+using System.Diagnostics;
+using System.Threading;
 using MultiThreading.Task3.MatrixMultiplier.Matrices;
 using MultiThreading.Task3.MatrixMultiplier.Multipliers;
 
@@ -19,14 +21,52 @@ namespace MultiThreading.Task3.MatrixMultiplier
             Console.WriteLine("3.	Write a program, which multiplies two matrices and uses class Parallel. ");
             Console.WriteLine();
 
-            const byte matrixSize = 2; // todo: use any number you like or enter from console
+            var stopwatch = new Stopwatch();
+
+            const byte matrixSize = 10;
+
+            stopwatch.Start();
+
             CreateAndProcessMatrices(matrixSize);
+
+            var firstTime = stopwatch.Elapsed;
+
+            stopwatch.Reset();
+            stopwatch.Start();
+
+            CreateAndProcessMatricesInParallel(matrixSize);
+
+            var secondTime = stopwatch.Elapsed;
+
+            Console.WriteLine($"Synchronous executing: {firstTime}");
+            Console.WriteLine($"Parallel executing: {secondTime}");
+            stopwatch.Stop();
+
             Console.ReadLine();
         }
 
         private static void CreateAndProcessMatrices(byte sizeOfMatrix)
         {
-            Console.WriteLine("Multiplying...");
+            Console.WriteLine("Synchronous multiplying...");
+            var firstMatrix = new Matrix(sizeOfMatrix, sizeOfMatrix);
+            var secondMatrix = new Matrix(sizeOfMatrix, sizeOfMatrix);
+
+            FillMatrix(firstMatrix);
+            FillMatrix(secondMatrix);
+
+            IMatrix resultMatrix = new MatricesMultiplierParallel().Multiply(firstMatrix, secondMatrix);
+
+            Console.WriteLine("firstMatrix:");
+            firstMatrix.Print();
+            Console.WriteLine("secondMatrix:");
+            secondMatrix.Print();
+            Console.WriteLine("resultMatrix:");
+            resultMatrix.Print();
+        }
+
+        private static void CreateAndProcessMatricesInParallel(byte sizeOfMatrix)
+        {
+            Console.WriteLine("Parallel Multiplying...");
             var firstMatrix = new Matrix(sizeOfMatrix, sizeOfMatrix);
             var secondMatrix = new Matrix(sizeOfMatrix, sizeOfMatrix);
 
