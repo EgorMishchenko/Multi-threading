@@ -161,5 +161,4 @@ namespace MultiThreading.Task6.Continuation
     {
         public CustomException(String message) : base(message)
         { }
-    }
 }

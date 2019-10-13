@@ -44,7 +44,6 @@ namespace MultiThreading.Task5.Threads.SharedCollection
                     PrintAllElements();
                 }
             }
-            
         }
 
         private static void PrintAllElements()
@@ -61,7 +60,5 @@ namespace MultiThreading.Task5.Threads.SharedCollection
                 Console.WriteLine();
             }
         }
-
-            
     }
 }
