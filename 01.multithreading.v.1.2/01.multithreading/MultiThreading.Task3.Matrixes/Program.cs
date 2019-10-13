@@ -8,7 +8,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Threading;
 using MultiThreading.Task3.MatrixMultiplier.Matrices;
 using MultiThreading.Task3.MatrixMultiplier.Multipliers;
 

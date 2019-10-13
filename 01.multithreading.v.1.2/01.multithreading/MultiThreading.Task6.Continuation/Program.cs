@@ -7,9 +7,6 @@
    Demonstrate the work of the each case with console utility.
 */
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -59,7 +56,7 @@ namespace MultiThreading.Task6.Continuation
 
             }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Current);
 
-           // d/
+           // d.
             CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
             CancellationToken token = cancelTokenSource.Token;
 
