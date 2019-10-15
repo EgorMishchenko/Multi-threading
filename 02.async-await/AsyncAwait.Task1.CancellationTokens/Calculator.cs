@@ -1,12 +1,15 @@
 ﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace AsyncAwait.Task1.CancellationTokens
 {
     static class Calculator
     {
         // todo: change this method to support cancellation token
-        public static long Calculate(int n/*, CancellationToken token*/)
+        public static Task<long> CalculateAsync(int n, CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
+
             long sum = 0;
 
             for (int i = 0; i < n; i++)
@@ -16,7 +19,7 @@ namespace AsyncAwait.Task1.CancellationTokens
                 Thread.Sleep(10);
             }
 
-            return sum;
+            return Task.FromResult(sum);
         }
     }
 }
