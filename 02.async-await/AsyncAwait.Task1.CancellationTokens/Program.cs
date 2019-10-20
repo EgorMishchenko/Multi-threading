@@ -35,7 +35,7 @@ namespace AsyncAwait.Task1.CancellationTokens
 
         if (int.TryParse(input, out int n))
         {
-          CalculateSumSecondWay(n, cts);
+          CalculateSum(n, cts);
         }
         else
         {
@@ -57,37 +57,16 @@ namespace AsyncAwait.Task1.CancellationTokens
       {
         cts.Token.Register(() => { Console.WriteLine($"Sum for {n} cancelled..."); });
         long sum = await Calculator.CalculateAsync(n, cts.Token);
-        
-        Console.WriteLine($"Sum for {n} = {sum}.");
+
+        if (!cts.Token.IsCancellationRequested)
+        {
+          Console.WriteLine($"Sum for {n} = {sum}.");
+        }
+
         Console.WriteLine();
         Console.WriteLine("Enter N: ");
       });
       
-      Console.WriteLine($"The task for {n} started... Enter N to cancel the request:");
-    }
-
-    // It doesn't work.
-    private static void CalculateSumSecondWay(int n, CancellationTokenSource cts)
-    {
-      try
-      {
-        Task.Run(async () =>
-        {
-          var task = Calculator.CalculateAsync(n, cts.Token);
-
-          await task;
-
-          Console.WriteLine($"Sum for {n} = {task.Result}.");
-          Console.WriteLine();
-          Console.WriteLine("Enter N: ");
-        });
-      }
-      catch (Exception e)
-      {
-        // This code is unreachable.
-        Console.WriteLine($"Sum for {n} cancelled...");
-      }
-
       Console.WriteLine($"The task for {n} started... Enter N to cancel the request:");
     }
   }
