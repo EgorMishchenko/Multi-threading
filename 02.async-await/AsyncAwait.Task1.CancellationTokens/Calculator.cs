@@ -15,12 +15,14 @@ namespace AsyncAwait.Task1.CancellationTokens
       {
         if (token.IsCancellationRequested)
         {
+          token.ThrowIfCancellationRequested();
           break;
         }
 
+        Console.WriteLine(i);
         // i + 1 is to allow 2147483647 (Max(Int32)) 
         sum = sum + (i + 1);
-        Thread.Sleep(10);
+        Thread.Sleep(1000);
       }
 
       return Task.FromResult(sum);

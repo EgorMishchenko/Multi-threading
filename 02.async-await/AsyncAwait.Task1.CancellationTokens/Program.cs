@@ -40,7 +40,6 @@ namespace AsyncAwait.Task1.CancellationTokens
 
           // Second way:
           Task.Run(async () => await CalculateSumSecondWayAsync(n, cts));
-          Console.WriteLine($"The task for {n} started... Enter N to cancel the request:");
         }
         else
         {
@@ -58,16 +57,21 @@ namespace AsyncAwait.Task1.CancellationTokens
 
     private static async Task CalculateSumSecondWayAsync(int n, CancellationTokenSource cts)
     {
-      cts.Token.Register(() => { Console.WriteLine($"Sum for {n} cancelled..."); });
-      var task = Calculator.CalculateAsync(n, cts.Token);
-      
-      long sum = await task;
-
-      if (!cts.Token.IsCancellationRequested)
+      try
       {
-        Console.WriteLine($"Sum for {n} = {sum}.");
-        Console.WriteLine();
-        Console.WriteLine("Enter N: ");
+        Console.WriteLine($"The task for {n} started... Enter N to cancel the request:");
+        var sum = await Calculator.CalculateAsync(n, cts.Token);
+        
+        if (!cts.Token.IsCancellationRequested)
+        {
+          Console.WriteLine($"Sum for {n} = {sum}.");
+          Console.WriteLine();
+          Console.WriteLine("Enter N: ");
+        }
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine($"Sum for {n} cancelled...");
       }
     }
 
