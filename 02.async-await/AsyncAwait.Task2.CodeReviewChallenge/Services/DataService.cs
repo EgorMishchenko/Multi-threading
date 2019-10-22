@@ -27,7 +27,7 @@ namespace AsyncAwait.CodeReviewChallenge.Services
         {
             using (HttpContent httpContent = new StringContent(userName))
             {
-                await _httpClient.PutAsync($"{BaseApiUrl}/v1/assistance/reg", httpContent).ConfigureAwait(false);
+                await _httpClient.PutAsync($"{BaseApiUrl}/v1/assistance/reg", httpContent);
             }
         }
 
