@@ -1,4 +1,7 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace ExpressionTrees.Task1.ExpressionsTransformer
 {
@@ -6,6 +9,7 @@ namespace ExpressionTrees.Task1.ExpressionsTransformer
   {
     protected override Expression VisitBinary(BinaryExpression node)
     {
+      // 1.
       if (node.NodeType == ExpressionType.Add)
       {
         ParameterExpression param = null;
@@ -60,6 +64,12 @@ namespace ExpressionTrees.Task1.ExpressionsTransformer
         {
           return Expression.Decrement(param);
         }
+      }
+
+      // 2.
+      if (node.Right.NodeType == ExpressionType.Parameter || node.Left.NodeType == ExpressionType.Parameter)
+      {
+        return Expression.Constant(Expression.Lambda<Func<int>>(node).Compile().Invoke());
       }
 
       return base.VisitBinary(node);
